@@ -18,10 +18,10 @@ we use pyMC with a gravitational signal to estimate mass quotient q
 
 ## References
 
-[1] Canizares, Priscilla, et al. "Accelerated gravitational wave parameter estimation with reduced order modeling." Physical review letters 114.7 (2015): 071104.
+__[1]__ Canizares, Priscilla, et al. "Accelerated gravitational wave parameter estimation with reduced order modeling." Physical review letters 114.7 (2015): 071104.
 
-[2] Canizares, Priscilla, et al. "Gravitational wave parameter estimation with compressed likelihood evaluations." Physical Review D—Particles, Fields, Gravitation, and Cosmology 87.12 (2013): 124005.
+__[2]__ Canizares, Priscilla, et al. "Gravitational wave parameter estimation with compressed likelihood evaluations." Physical Review D—Particles, Fields, Gravitation, and Cosmology 87.12 (2013): 124005.
 
-[3] Tiglio, Manuel, and Aarón Villanueva. "Reduced order and surrogate models for gravitational waves." Living Reviews in Relativity 25.1 (2022): 2.
+__[3]__ Tiglio, Manuel, and Aarón Villanueva. "Reduced order and surrogate models for gravitational waves." Living Reviews in Relativity 25.1 (2022): 2.
 
-[4] Cerino, Franco, J. Andrés Diaz-Pace, and Manuel Tiglio. "An automated parameter domain decomposition approach for gravitational wave surrogates using hp-greedy refinement." Classical and Quantum Gravity 40.20 (2023): 205003.
+__[4]__ Cerino, Franco, J. Andrés Diaz-Pace, and Manuel Tiglio. "An automated parameter domain decomposition approach for gravitational wave surrogates using hp-greedy refinement." Classical and Quantum Gravity 40.20 (2023): 205003.
