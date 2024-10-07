@@ -5,7 +5,7 @@ Repository to learn signal parameter estimation with PyMC. The final goal is to 
 To build the likelihood function we use [Scikit-reducedmodel](https://github.com/francocerino/scikit-reducedmodel), a package that performs subdomain partition to achieve higher precision.
 
 ## Step 1: Random signal parameter estimation with predefined likelihood
-The goal here is get to know pyMC package and perform parameter estimation on a simple signal 
+Learn pyMC package: perform parameter estimation on a simple signal 
 
 ## Step 2: Gravitational wave parameter estimation with predefined likelihood
 we use pyMC with a gravitational signal to estimate mass quotient q
