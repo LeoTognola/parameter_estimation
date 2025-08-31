@@ -1,0 +1,89 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from pycbc.waveform import get_td_waveform
+from pycbc.filter import matched_filter
+from pycbc.types import TimeSeries
+from pycbc.psd import aLIGOZeroDetHighPower
+
+# ================================
+# 1. Generar la onda "real" (señal observada)
+# ================================
+hp_rom, hc_rom = get_td_waveform(
+    approximant='SEOBNRv4_ROM',
+    mass1=6,
+    mass2=6,
+    delta_t=1.0 / 4096,
+    f_lower=40
+)
+
+# Convertir a numpy y agregar ruido
+t = hp_rom.sample_times
+signal = np.array(hp_rom)
+
+# Ruido gaussiano escalado
+gaussian_noise = np.random.normal(size=len(t))
+scaled_noise = gaussian_noise * np.max(np.abs(signal))
+
+# Señal observada (onda + ruido)
+observed_signal = signal + scaled_noise
+
+# Convertir a TimeSeries de PyCBC
+observed_ts = TimeSeries(observed_signal, delta_t=1.0/4096)
+
+# ================================
+# 2. Preparar PSD (Power Spectral Density)
+# ================================
+data_fd = observed_ts.to_frequencyseries()
+psd = aLIGOZeroDetHighPower(len(data_fd), data_fd.delta_f, 20.0)
+
+# ================================
+# 3. Búsqueda de masas por matched filter
+# ================================
+masses = np.arange(5, 15, 1)   # rango de búsqueda de m1 = m2
+best_snr = 0
+best_mass = None
+
+for m in masses:
+    # generar plantilla
+    hp, _ = get_td_waveform(
+        approximant='SEOBNRv4_ROM',
+        mass1=m,
+        mass2=m,
+        delta_t=1.0/4096,
+        f_lower=40
+    )
+    
+    # Ajustar longitud de la plantilla al dato observado
+    hp.resize(len(observed_ts))
+    hp_fd = hp.to_frequencyseries()
+
+    # matched filter
+    snr = matched_filter(hp_fd, data_fd, psd=psd, low_frequency_cutoff=40.0)
+
+    # buscar el máximo valor de SNR
+    peak_snr = abs(snr).numpy().max()
+    if peak_snr > best_snr:
+        best_snr = peak_snr
+        best_mass = m
+
+print("Valor masa estimado con m1 = m2 = {:.2f} M_sun (SNR={:.2f})".format(best_mass, best_snr))
+
+# ================================
+# 4. Graficar señal observada vs plantilla óptima
+# ================================
+hp_best, _ = get_td_waveform(
+    approximant='SEOBNRv4_ROM',
+    mass1=best_mass,
+    mass2=best_mass,
+    delta_t=1.0/4096,
+    f_lower=40
+)
+hp_best.resize(len(observed_ts))
+
+plt.figure(figsize=(10,6))
+plt.plot(t, observed_signal, label="Señal observada (onda + ruido)", alpha=0.7)
+plt.plot(hp_best.sample_times, hp_best, label="Plantilla mejor ajuste (m={:.2f})".format(best_mass), alpha=0.8)
+plt.xlabel("Tiempo (s)")
+plt.ylabel("Amplitud")
+plt.legend()
+plt.show()
